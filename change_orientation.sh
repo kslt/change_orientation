@@ -14,7 +14,7 @@ fi
 if grep -q "$SEARCH" "$FILE"; then
     echo "Följande rad hittades:"
     grep "$SEARCH" "$FILE"
-    
+
     echo "Vill du ändra denna rad till:"
     echo "$REPLACE"
     read -p "Skriv 'ja' för att bekräfta ändringen: " confirm
@@ -24,6 +24,15 @@ if grep -q "$SEARCH" "$FILE"; then
         cp "$FILE" "$FILE.bak"
         sed -i "s|$SEARCH|$REPLACE|" "$FILE"
         echo "Ändringen är gjord. Backup sparad som $FILE.bak"
+
+        # Fråga om reboot
+        read -p "Vill du starta om datorn nu? (ja/nej): " reboot_confirm
+        if [ "$reboot_confirm" = "ja" ]; then
+            echo "Startar om..."
+            sudo reboot
+        else
+            echo "Ingen omstart gjordes."
+        fi
     else
         echo "Ingen ändring gjordes."
     fi
